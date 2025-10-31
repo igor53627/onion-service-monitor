@@ -49,12 +49,13 @@ jobs:
         run: |
           sed -i 's/cargo install --locked arti/cargo install --locked arti --version ${{ github.event.inputs.arti_version }}/' Dockerfile.arti
 
-      - name: Build and push Arti image
+      - name: Build Arti image
         uses: docker/build-push-action@v5
         with:
           context: .
           file: ./Dockerfile.arti
-          push: true
+          push: false
+          load: true
           tags: |
             ghcr.io/${{ github.repository_owner }}/arti:${{ steps.arti_version.outputs.version }}
             ghcr.io/${{ github.repository_owner }}/arti:latest
@@ -64,6 +65,11 @@ jobs:
             org.opencontainers.image.source=${{ github.event.repository.html_url }}
             org.opencontainers.image.description=Arti (Tor in Rust) - A modern, secure Tor implementation
             org.opencontainers.image.licenses=MIT OR Apache-2.0
+
+      - name: Push Arti image
+        run: |
+          docker push ghcr.io/${{ github.repository_owner }}/arti:${{ steps.arti_version.outputs.version }}
+          docker push ghcr.io/${{ github.repository_owner }}/arti:latest
 
       - name: Get actual Arti version from built image
         id: actual_version
