@@ -4,24 +4,6 @@ A fully automated monitoring system for Tor hidden services (.onion addresses) w
 
 🌐 **Live Site:** https://igor53627.github.io/onion-service-monitor/
 
-## Features
-
-### Frontend
-- **Modern React UI**: Built with React 18 + TypeScript + Vite
-- **Chakra UI**: Beautiful, accessible components with Tor-inspired theme
-- **Dark/Light Mode**: Seamless theme switching with user preference
-- **Search & Filter**: Fast client-side search and status filtering
-- **Responsive Design**: Mobile-first, works on all devices
-- **One-Click Copy**: Easy .onion address copying to clipboard
-- **Real-time Status**: Visual status indicators (online, offline, error codes)
-
-### Backend
-- **Arti Integration**: Uses Arti, the modern Rust implementation of Tor
-- **Docker Compose**: Complete containerized setup for easy deployment
-- **Automated Monitoring**: Runs daily via GitHub Actions (configurable schedule)
-- **GitHub Pages**: Automatically builds and deploys frontend
-- **History Tracking**: Tracks status changes (status → prev_status) in JSON
-
 ## Architecture
 
 ```
@@ -60,6 +42,24 @@ A fully automated monitoring system for Tor hidden services (.onion addresses) w
                               │ (Static Site) │
                               └───────────────┘
 ```
+
+## Features
+
+### Backend
+- **Arti Integration**: Uses Arti, the modern Rust implementation of Tor
+- **Docker Compose**: Complete containerized setup for easy deployment
+- **Automated Monitoring**: Runs daily via GitHub Actions (configurable schedule)
+- **GitHub Pages**: Automatically builds and deploys frontend
+- **History Tracking**: Tracks status changes (status → prev_status) in JSON
+
+### Frontend
+- **Modern React UI**: Built with React 18 + TypeScript + Vite
+- **Chakra UI**: Beautiful, accessible components with Tor-inspired theme
+- **Dark/Light Mode**: Seamless theme switching with user preference
+- **Search & Filter**: Fast client-side search and status filtering
+- **Responsive Design**: Mobile-first, works on all devices
+- **One-Click Copy**: Easy .onion address copying to clipboard
+- **Real-time Status**: Visual status indicators (online, offline, error codes)
 
 ## Quick Start
 
