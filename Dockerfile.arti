@@ -1,5 +1,5 @@
 # Multi-stage build for Arti
-FROM rust:latest as builder
+FROM rust:slim-bookworm as builder
 
 # Install dependencies
 RUN apt-get update && \
@@ -7,6 +7,7 @@ RUN apt-get update && \
     build-essential \
     libssl-dev \
     pkg-config \
+    libsqlite3-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Arti
