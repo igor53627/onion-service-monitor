@@ -1,5 +1,5 @@
 # Multi-stage build for Arti
-FROM rust:1.75-slim as builder
+FROM rust:latest as builder
 
 # Install dependencies
 RUN apt-get update && \
