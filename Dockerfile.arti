@@ -22,6 +22,9 @@ RUN apt-get update && \
     ca-certificates \
     libssl3 \
     libsqlite3-0 \
+    libgcc-s1 \
+    libc6 \
+    zlib1g \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy Arti binary from builder
