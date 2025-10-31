@@ -30,10 +30,17 @@ RUN apt-get update && \
 # Copy Arti binary from builder
 COPY --from=builder /usr/local/cargo/bin/arti /usr/local/bin/arti
 
+# Create arti user and group
+RUN groupadd -r arti && useradd -r -g arti arti
+
 # Create data directories
-RUN mkdir -p /app/data/cache /app/data/state
+RUN mkdir -p /app/data/cache /app/data/state && \
+    chown -R arti:arti /app
 
 WORKDIR /app
+
+# Switch to arti user
+USER arti
 
 # Expose SOCKS5 port
 EXPOSE 9150
