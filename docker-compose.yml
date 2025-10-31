@@ -19,7 +19,8 @@ services:
       test: ["CMD", "nc", "-z", "localhost", "9150"]
       interval: 10s
       timeout: 5s
-      retries: 5
+      retries: 30
+      start_period: 300s
 
   monitor:
     build:
