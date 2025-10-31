@@ -5,13 +5,11 @@ services:
       dockerfile: Dockerfile.arti
     container_name: arti-proxy
     volumes:
-      - ./arti-data:/app/data
-      - ./arti-config.toml:/app/arti-config.toml:ro
+      - arti-data:/app/data
     ports:
       - "9150:9150"
     networks:
       - tor-network
-    user: "1000:1000"
     healthcheck:
       test: ["CMD-SHELL", "nc -z localhost 9150 || exit 1"]
       interval: 10s
@@ -39,3 +37,6 @@ services:
 networks:
   tor-network:
     driver: bridge
+
+volumes:
+  arti-data:

@@ -33,11 +33,16 @@ COPY --from=builder /usr/local/cargo/bin/arti /usr/local/bin/arti
 # Create arti user and group
 RUN groupadd -r arti && useradd -r -g arti arti
 
-# Create data directories
-RUN mkdir -p /app/data/cache /app/data/state && \
-    chown -R arti:arti /app
+# Create data directories and set permissions
+RUN mkdir -p /app/data/cache /app/data/state
 
 WORKDIR /app
+
+# Copy and set ownership of config file
+COPY --chown=arti:arti arti-config.toml /app/arti-config.toml
+
+# Set ownership of app directory
+RUN chown -R arti:arti /app
 
 # Switch to arti user
 USER arti
