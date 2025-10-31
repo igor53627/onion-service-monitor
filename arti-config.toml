@@ -1,0 +1,13 @@
+[proxy]
+socks_listen = ["0.0.0.0:9150"]
+
+[storage]
+cache_dir = "/app/data/cache"
+state_dir = "/app/data/state"
+
+[application]
+permit_debugging = false
+allow_running_as_root = true
+
+[logging]
+console = "info"

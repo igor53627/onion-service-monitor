@@ -1,0 +1,43 @@
+services:
+  arti:
+    image: rust:latest
+    container_name: arti-proxy
+    working_dir: /app
+    volumes:
+      - ./arti-data:/app/data
+      - ./arti-config.toml:/app/arti-config.toml
+    command: >
+      sh -c "apt-get update &&
+             apt-get install -y git build-essential libssl-dev pkg-config netcat-openbsd &&
+             cargo install --locked arti &&
+             /usr/local/cargo/bin/arti proxy -c /app/arti-config.toml"
+    ports:
+      - "9150:9150"
+    networks:
+      - tor-network
+    healthcheck:
+      test: ["CMD", "nc", "-z", "localhost", "9150"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  monitor:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: onion-monitor
+    depends_on:
+      arti:
+        condition: service_healthy
+    volumes:
+      - ./onions.json:/app/onions.json
+      - ./docs:/app/docs
+    environment:
+      - SOCKS_PROXY=socks5://arti:9150
+      - RUST_LOG=info
+    networks:
+      - tor-network
+
+networks:
+  tor-network:
+    driver: bridge
