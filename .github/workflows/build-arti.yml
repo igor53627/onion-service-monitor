@@ -128,26 +128,6 @@ jobs:
 
           cat release-notes.md
 
-      - name: Update package README
-        run: |
-          # Read the ARTI-README.md content
-          README_CONTENT=$(cat ARTI-README.md)
-
-          # Update package description using GitHub API
-          # Note: This requires packages:write permission which is already set
-          echo "Updating GHCR package description..."
-
-          # The description is limited, so we'll add a link to the full README
-          DESCRIPTION="Pre-built Docker image for Arti (Rust Tor implementation). SOCKS5 proxy on port 9150. 📖 Full docs: https://github.com/${{ github.repository_owner }}/onion-service-monitor/blob/main/ARTI-README.md"
-
-          # Update the package visibility and description
-          curl -X PATCH \
-            -H "Accept: application/vnd.github+json" \
-            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-            -H "X-GitHub-Api-Version: 2022-11-28" \
-            https://api.github.com/user/packages/container/arti \
-            -d "{\"description\":\"$DESCRIPTION\"}" || echo "Note: Package description update requires manual approval for first-time packages"
-
       - name: Output image details
         run: |
           echo "## Arti Docker Image Published! 🎉" >> $GITHUB_STEP_SUMMARY
