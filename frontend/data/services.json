@@ -5,9 +5,6 @@
     "onion_address": "http://7ikxpzt676bjj3vvgdfafryn3qtyvhf4oscja3wzv6ga2nzo2z3ugoqd.onion/ethereum/public",
     "status": "online",
     "prev_status": "online",
-    "last_checked": "2025-10-30T20:05:15.726186008Z",
-    "category": "RPC Provider",
-    "description": "Decentralized RPC network providing Ethereum access over Tor",
-    "tags": ["RPC", "Ethereum"]
+    "last_checked": "2025-10-31T05:57:29.337791842Z"
   }
 ]
