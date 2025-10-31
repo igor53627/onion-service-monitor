@@ -63,8 +63,12 @@ jobs:
           cache-to: type=gha,mode=max,scope=arti
           labels: |
             org.opencontainers.image.source=${{ github.event.repository.html_url }}
-            org.opencontainers.image.description=Arti (Tor in Rust) - A modern, secure Tor implementation
+            org.opencontainers.image.description=Pre-built Docker image for Arti, the modern Rust implementation of Tor. SOCKS5 proxy on port 9150.
             org.opencontainers.image.licenses=MIT OR Apache-2.0
+            org.opencontainers.image.title=Arti (Tor in Rust)
+            org.opencontainers.image.url=https://github.com/${{ github.repository_owner }}/onion-service-monitor
+            org.opencontainers.image.documentation=https://github.com/${{ github.repository_owner }}/onion-service-monitor/blob/main/ARTI-README.md
+            org.opencontainers.image.vendor=${{ github.repository_owner }}
 
       - name: Push Arti image
         run: |
