@@ -1,6 +1,6 @@
 services:
   arti:
-    image: onion-service-monitor-arti:latest
+    image: ${ARTI_IMAGE:-onion-service-monitor-arti:latest}
     build:
       context: .
       dockerfile: Dockerfile.arti

@@ -1,0 +1,130 @@
+name: Build and Publish Arti Docker Image
+
+on:
+  workflow_dispatch:
+    inputs:
+      arti_version:
+        description: 'Arti version to build (e.g., 1.7.0, or "latest")'
+        required: true
+        default: 'latest'
+  schedule:
+    - cron: '0 0 * * 0'  # Weekly on Sunday to check for updates
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Get Arti version
+        id: arti_version
+        run: |
+          if [ "${{ github.event.inputs.arti_version }}" != "" ]; then
+            VERSION="${{ github.event.inputs.arti_version }}"
+          else
+            VERSION="latest"
+          fi
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+          # Get actual installed version after build for tagging
+          echo "Building Arti version: $VERSION"
+
+      - name: Update Dockerfile with specific version
+        if: github.event.inputs.arti_version != 'latest' && github.event.inputs.arti_version != ''
+        run: |
+          sed -i 's/cargo install --locked arti/cargo install --locked arti --version ${{ github.event.inputs.arti_version }}/' Dockerfile.arti
+
+      - name: Build and push Arti image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile.arti
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/arti:${{ steps.arti_version.outputs.version }}
+            ghcr.io/${{ github.repository_owner }}/arti:latest
+          cache-from: type=gha,scope=arti
+          cache-to: type=gha,mode=max,scope=arti
+          labels: |
+            org.opencontainers.image.source=${{ github.event.repository.html_url }}
+            org.opencontainers.image.description=Arti (Tor in Rust) - A modern, secure Tor implementation
+            org.opencontainers.image.licenses=MIT OR Apache-2.0
+
+      - name: Get actual Arti version from built image
+        id: actual_version
+        run: |
+          docker pull ghcr.io/${{ github.repository_owner }}/arti:latest
+          ACTUAL_VERSION=$(docker run --rm ghcr.io/${{ github.repository_owner }}/arti:latest arti --version | grep -oP 'Arti \K[0-9.]+')
+          echo "actual_version=$ACTUAL_VERSION" >> $GITHUB_OUTPUT
+          echo "Built Arti version: $ACTUAL_VERSION"
+
+      - name: Tag with actual version
+        if: steps.actual_version.outputs.actual_version != ''
+        run: |
+          docker pull ghcr.io/${{ github.repository_owner }}/arti:latest
+          docker tag ghcr.io/${{ github.repository_owner }}/arti:latest ghcr.io/${{ github.repository_owner }}/arti:${{ steps.actual_version.outputs.actual_version }}
+          docker push ghcr.io/${{ github.repository_owner }}/arti:${{ steps.actual_version.outputs.actual_version }}
+
+      - name: Create release notes
+        run: |
+          cat > release-notes.md << 'EOF'
+          # Arti Docker Image v${{ steps.actual_version.outputs.actual_version }}
+
+          Pre-built Docker image for Arti (Tor implementation in Rust).
+
+          ## Usage
+
+          ```bash
+          # Pull the image
+          docker pull ghcr.io/${{ github.repository_owner }}/arti:latest
+          # or specific version
+          docker pull ghcr.io/${{ github.repository_owner }}/arti:${{ steps.actual_version.outputs.actual_version }}
+
+          # Run Arti proxy
+          docker run -p 9150:9150 ghcr.io/${{ github.repository_owner }}/arti:latest
+          ```
+
+          ## Image Details
+
+          - **Arti Version**: ${{ steps.actual_version.outputs.actual_version }}
+          - **Base Image**: Debian Bookworm Slim
+          - **Exposed Port**: 9150 (SOCKS5 proxy)
+          - **Size**: Optimized multi-stage build
+
+          ## Available Tags
+
+          - `latest` - Latest Arti release
+          - `${{ steps.actual_version.outputs.actual_version }}` - Specific Arti version
+
+          ## License
+
+          Dual-licensed under MIT OR Apache-2.0
+          EOF
+
+          cat release-notes.md
+
+      - name: Output image details
+        run: |
+          echo "## Arti Docker Image Published! 🎉" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Version**: ${{ steps.actual_version.outputs.actual_version }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Pull command**:" >> $GITHUB_STEP_SUMMARY
+          echo '```bash' >> $GITHUB_STEP_SUMMARY
+          echo "docker pull ghcr.io/${{ github.repository_owner }}/arti:${{ steps.actual_version.outputs.actual_version }}" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
