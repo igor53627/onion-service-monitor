@@ -76,12 +76,15 @@ jobs:
     needs: monitor
     runs-on: ubuntu-latest
     concurrency:
-      group: pages-deploy
+      group: github-pages
       cancel-in-progress: false
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
+      - name: Wait for any pending deployments
+        run: sleep 30
+
       - name: Checkout
         uses: actions/checkout@v4
 
