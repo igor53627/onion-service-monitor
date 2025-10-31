@@ -47,6 +47,7 @@ A fully automated monitoring system for Tor hidden services (.onion addresses) w
 
 ### Backend
 - **Arti Integration**: Uses Arti, the modern Rust implementation of Tor
+- **Pre-built Arti Image**: Published to GitHub Container Registry (`ghcr.io/igor53627/arti`)
 - **Docker Compose**: Complete containerized setup for easy deployment
 - **Automated Monitoring**: Runs daily via GitHub Actions (configurable schedule)
 - **GitHub Pages**: Automatically builds and deploys frontend
@@ -272,6 +273,34 @@ SOCKS_PROXY=socks5://127.0.0.1:9150 cargo run
 # Sync data to frontend
 ./sync-data.sh
 ```
+
+### Using Pre-built Arti Image
+
+The Arti Docker image is pre-built and published to GitHub Container Registry, making it easy to use in your own projects:
+
+```bash
+# Pull the latest Arti image
+docker pull ghcr.io/igor53627/arti:latest
+
+# Or pull a specific version
+docker pull ghcr.io/igor53627/arti:1.7.0
+
+# Run Arti proxy standalone
+docker run -p 9150:9150 ghcr.io/igor53627/arti:latest
+
+# Use in your own docker-compose.yml
+services:
+  arti:
+    image: ghcr.io/igor53627/arti:latest
+    ports:
+      - "9150:9150"
+```
+
+**Available tags:**
+- `latest` - Latest Arti release (currently 1.7.0)
+- `1.7.0` - Specific Arti version
+
+The image is automatically rebuilt weekly to include the latest Arti version.
 
 ### Docker Builds
 

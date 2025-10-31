@@ -1,6 +1,6 @@
 services:
   arti:
-    image: ${ARTI_IMAGE:-onion-service-monitor-arti:latest}
+    image: ${ARTI_IMAGE:-ghcr.io/igor53627/arti:latest}
     build:
       context: .
       dockerfile: Dockerfile.arti
