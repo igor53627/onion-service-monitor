@@ -14,7 +14,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: "pages"
+  group: ${{ github.workflow }}
   cancel-in-progress: true
 
 jobs:
@@ -75,9 +75,6 @@ jobs:
   deploy:
     needs: monitor
     runs-on: ubuntu-latest
-    concurrency:
-      group: github-pages
-      cancel-in-progress: false
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
