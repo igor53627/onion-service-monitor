@@ -1,26 +1,22 @@
 services:
   arti:
-    image: rust:latest
+    build:
+      context: .
+      dockerfile: Dockerfile.arti
     container_name: arti-proxy
-    working_dir: /app
     volumes:
       - ./arti-data:/app/data
       - ./arti-config.toml:/app/arti-config.toml
-    command: >
-      sh -c "apt-get update &&
-             apt-get install -y git build-essential libssl-dev pkg-config netcat-openbsd &&
-             cargo install --locked arti &&
-             /usr/local/cargo/bin/arti proxy -c /app/arti-config.toml"
     ports:
       - "9150:9150"
     networks:
       - tor-network
     healthcheck:
-      test: ["CMD", "nc", "-z", "localhost", "9150"]
+      test: ["CMD-SHELL", "nc -z localhost 9150 || exit 1"]
       interval: 10s
       timeout: 5s
-      retries: 30
-      start_period: 300s
+      retries: 10
+      start_period: 30s
 
   monitor:
     build:

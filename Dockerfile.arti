@@ -1,0 +1,37 @@
+# Multi-stage build for Arti
+FROM rust:1.75-slim as builder
+
+# Install dependencies
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    build-essential \
+    libssl-dev \
+    pkg-config \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Arti
+RUN cargo install --locked arti
+
+# Runtime image
+FROM debian:bookworm-slim
+
+# Install runtime dependencies
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    ca-certificates \
+    libssl3 \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy Arti binary from builder
+COPY --from=builder /usr/local/cargo/bin/arti /usr/local/bin/arti
+
+# Create data directories
+RUN mkdir -p /app/data/cache /app/data/state
+
+WORKDIR /app
+
+# Expose SOCKS5 port
+EXPOSE 9150
+
+# Run Arti
+CMD ["arti", "proxy", "-c", "/app/arti-config.toml"]
