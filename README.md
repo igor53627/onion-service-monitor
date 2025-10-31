@@ -2,6 +2,8 @@
 
 A fully automated monitoring system for Tor hidden services (.onion addresses) with a modern React frontend, powered by Arti (Rust Tor implementation), Docker Compose, and GitHub Actions.
 
+🌐 **Live Site:** https://igor53627.github.io/onion-service-monitor/
+
 ## Features
 
 ### Frontend
