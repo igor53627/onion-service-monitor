@@ -25,6 +25,7 @@ RUN apt-get update && \
     libgcc-s1 \
     libc6 \
     zlib1g \
+    netcat-openbsd \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy Arti binary from builder
