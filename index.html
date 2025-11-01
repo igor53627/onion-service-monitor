@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Onion Service Monitor</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%237d33b8'/%3E%3Ccircle cx='50' cy='50' r='35' fill='none' stroke='white' stroke-width='3' opacity='0.8'/%3E%3Ccircle cx='50' cy='50' r='25' fill='none' stroke='white' stroke-width='3' opacity='0.6'/%3E%3Ccircle cx='50' cy='50' r='15' fill='none' stroke='white' stroke-width='3' opacity='0.4'/%3E%3Ccircle cx='50' cy='50' r='6' fill='white'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      /* Tor Purple Palette */
+      --tor-purple-50: #f5e9ff;
+      --tor-purple-100: #ddc2f4;
+      --tor-purple-200: #c59be8;
+      --tor-purple-300: #ad73dd;
+      --tor-purple-400: #964cd1;
+      --tor-purple-500: #7d33b8;
+      --tor-purple-600: #61278f;
+      --tor-purple-700: #461b67;
+      --tor-purple-800: #2b1040;
+      --tor-purple-900: #13051b;
+
+      /* Onion Warm Tones */
+      --onion-500: #e6882d;
+      --onion-600: #b46a22;
+
+      /* Light Mode Colors */
+      --bg-body: #F7FAFC;
+      --bg-card: #FFFFFF;
+      --text-primary: #212335;
+      --text-secondary: #718096;
+      --border-color: #E2E8F0;
+
+      /* Status Colors */
+      --success: #48BB78;
+      --error: #F56565;
+      --warning: #ED8936;
+      --info: #4299E1;
+
+      /* Badge Colors */
+      --badge-wip-bg: rgba(255, 111, 97, 0.15);
+      --badge-wip-color: #D45A4E;
+      --badge-socks5-bg: rgba(15, 76, 129, 0.15);
+      --badge-socks5-color: #0F4C81;
+      --badge-onion-bg: rgba(102, 103, 171, 0.15);
+      --badge-onion-color: #5355A0;
+    }
+
+    html {
+      height: 100%;
+    }
+
+    body {
+      font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg-body);
+      color: var(--text-primary);
+      line-height: 1.6;
+      min-height: 100vh;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .page-wrapper {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      width: 100%;
+    }
+
+    .content-wrapper {
+      flex: 1;
+    }
+
+    header {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 24px 16px;
+      border-bottom: 1px solid var(--border-color);
+      background: var(--bg-card);
+      box-sizing: border-box;
+    }
+
+    @media (min-width: 768px) {
+      header {
+        padding: 24px 32px;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      header {
+        padding: 24px 48px;
+      }
+    }
+
+    .container {
+      max-width: 100%;
+      margin: 0 auto;
+      padding: 0 16px 48px 16px;
+    }
+
+    @media (min-width: 768px) {
+      .container {
+        padding: 0 32px 48px 32px;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .container {
+        padding: 0 48px 48px 48px;
+      }
+    }
+
+    .header-content {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .tor-logo {
+      width: 40px;
+      height: 40px;
+      flex-shrink: 0;
+    }
+
+    .header-text {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    h1 {
+      font-family: 'Inter', sans-serif;
+      color: var(--text-primary);
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    .subtitle {
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+      font-weight: 400;
+    }
+
+    .section-header {
+      margin-bottom: 32px;
+      margin-top: 48px;
+    }
+
+    .section-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin: 0;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 24px;
+      margin-bottom: 48px;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+      transition: all 0.3s;
+      overflow: hidden;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+
+    .card-content {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .card-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin: 0;
+      flex: 1;
+    }
+
+    .onion-url-box {
+      background: var(--tor-purple-800);
+      border: 1px solid var(--tor-purple-600);
+      border-radius: 6px;
+      padding: 12px;
+    }
+
+    .onion-url-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .onion-url-left {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .onion-icon {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+    }
+
+    .onion-label {
+      font-size: 0.75rem;
+      color: var(--tor-purple-200);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+
+    .onion-url {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--tor-purple-200);
+      word-break: break-all;
+      line-height: 1.4;
+      margin-top: 8px;
+    }
+
+    .card-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      gap: 8px;
+    }
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .meta-label {
+      color: var(--text-secondary);
+    }
+
+    .meta-value {
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.025em;
+      flex-shrink: 0;
+    }
+
+    .status-online {
+      background: rgba(72, 187, 120, 0.2);
+      color: #48BB78;
+    }
+
+    .status-offline {
+      background: rgba(245, 101, 101, 0.2);
+      color: #F56565;
+    }
+
+    .status-unknown {
+      background: rgba(160, 174, 192, 0.2);
+      color: #A0AEC0;
+    }
+
+    .status-error {
+      background: rgba(237, 137, 54, 0.2);
+      color: #ED8936;
+    }
+
+    footer {
+      width: 100%;
+      background: var(--bg-card);
+      border-top: 1px solid var(--border-color);
+      margin-top: auto;
+    }
+
+    .footer-container {
+      max-width: 100%;
+      margin: 0 auto;
+      padding: 32px 16px;
+    }
+
+    @media (min-width: 768px) {
+      .footer-container {
+        padding: 32px 32px;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .footer-container {
+        padding: 32px 48px;
+      }
+    }
+
+    .footer-content {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+
+    .footer-content a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: color 0.2s;
+    }
+
+    .footer-content a:hover {
+      color: var(--tor-purple-500);
+      text-decoration: underline;
+    }
+
+    .footer-divider {
+      color: var(--text-secondary);
+      opacity: 0.4;
+    }
+
+    @media (max-width: 768px) {
+      .cards-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      header {
+        padding: 16px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+      }
+
+      .header-content {
+        gap: 12px;
+      }
+
+      .card-content {
+        padding: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-wrapper">
+    <header>
+      <div class="header-content">
+        <svg class="tor-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+          <circle cx="50" cy="50" r="45" fill="#7d33b8"/>
+          <circle cx="50" cy="50" r="35" fill="none" stroke="white" stroke-width="3" opacity="0.8"/>
+          <circle cx="50" cy="50" r="25" fill="none" stroke="white" stroke-width="3" opacity="0.6"/>
+          <circle cx="50" cy="50" r="15" fill="none" stroke="white" stroke-width="3" opacity="0.4"/>
+          <circle cx="50" cy="50" r="6" fill="white"/>
+        </svg>
+        <div class="header-text">
+          <h1>Onion Service Monitor</h1>
+          <p class="subtitle">Monitoring Tor Hidden Services via Arti</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="content-wrapper">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Monitored Services</h2>
+        </div>
+
+        <div class="cards-grid">
+        <div class="card">
+          <div class="card-content">
+            <div class="card-header">
+              <h3 class="card-title">DRPC</h3>
+              <span class="status-badge status-online">Online</span>
+            </div>
+            <div class="onion-url-box">
+              <div class="onion-url-content">
+                <div class="onion-url-left">
+                  <svg class="onion-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="45" fill="#7d33b8"/>
+                    <circle cx="50" cy="50" r="35" fill="none" stroke="white" stroke-width="3" opacity="0.8"/>
+                    <circle cx="50" cy="50" r="25" fill="none" stroke="white" stroke-width="3" opacity="0.6"/>
+                    <circle cx="50" cy="50" r="15" fill="none" stroke="white" stroke-width="3" opacity="0.4"/>
+                    <circle cx="50" cy="50" r="6" fill="white"/>
+                  </svg>
+                  <span class="onion-label">.onion</span>
+                </div>
+              </div>
+              <div class="onion-url">http://7ikxpzt676bjj3vvgdfafryn3qtyvhf4oscja3wzv6ga2nzo2z3ugoqd.onion/ethereum/public</div>
+            </div>
+            <div class="card-meta">
+              <div class="meta-item">
+                <span class="meta-label">Response:</span>
+                <span class="meta-value">2852ms</span>
+              </div>
+              <div class="meta-item">
+                <span class="meta-label">Checked:</span>
+                <span class="meta-value">Nov 01, 2025 01:48 UTC</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <div class="footer-container">
+        <div class="footer-content">
+          <span>Powered by Arti - The Rust Tor Implementation</span>
+          <span class="footer-divider">•</span>
+          <span>Last updated: Nov 01, 2025 01:48 UTC</span>
+          <span class="footer-divider">•</span>
+          <a href="https://github.com/igor53627/tor-ethereum-ecosystem" target="_blank">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+            </svg>
+            Tor in Ethereum Ecosystem
+          </a>
+        </div>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>
