@@ -5,14 +5,14 @@
     "onion_address": "http://7ikxpzt676bjj3vvgdfafryn3qtyvhf4oscja3wzv6ga2nzo2z3ugoqd.onion/ethereum/public",
     "status": "online",
     "prev_status": "online",
-    "last_checked": "2025-11-03T02:43:41.000121521Z"
+    "last_checked": "2025-11-03T02:55:08.352996463Z"
   },
   {
     "title": "Tornado Cash",
     "name": "tornado-cash",
     "onion_address": "http://cpxtor3q3klwgvk722swah7jbvz3vsoqvye5skun6tarseayw5uvpayd.onion/",
-    "status": "unknown",
+    "status": "online",
     "prev_status": "unknown",
-    "last_checked": "1970-01-01T00:00:00Z"
+    "last_checked": "2025-11-03T02:55:12.819740401Z"
   }
 ]
