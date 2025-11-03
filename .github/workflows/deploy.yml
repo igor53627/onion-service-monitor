@@ -45,6 +45,8 @@ jobs:
         run: |
           docker compose up --no-build --abort-on-container-exit
         timeout-minutes: 15
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Sync data to frontend
         run: |

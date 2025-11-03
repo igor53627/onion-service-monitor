@@ -33,6 +33,7 @@ services:
     environment:
       - SOCKS_PROXY=socks5://arti:9150
       - RUST_LOG=info
+      - GITHUB_TOKEN=${GITHUB_TOKEN}
     networks:
       - tor-network
 

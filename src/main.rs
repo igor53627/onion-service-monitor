@@ -121,7 +121,14 @@ async fn fetch_onion_addresses_from_github() -> Result<Vec<OnionSite>> {
     let api_url = "https://api.github.com/repos/igor53627/tor-ethereum-ecosystem/contents/src/data";
     println!("  Fetching directory listing from GitHub API...");
 
-    let files_response = client.get(api_url).send().await
+    // Build request with optional GitHub token for authentication (avoids rate limiting)
+    let mut request = client.get(api_url);
+    if let Ok(token) = env::var("GITHUB_TOKEN") {
+        println!("  Using GitHub token for authentication");
+        request = request.header("Authorization", format!("Bearer {}", token));
+    }
+
+    let files_response = request.send().await
         .context("Failed to fetch directory listing")?;
 
     let github_files: Vec<GitHubFile> = files_response.json().await
@@ -141,7 +148,13 @@ async fn fetch_onion_addresses_from_github() -> Result<Vec<OnionSite>> {
         if let Some(download_url) = file.download_url {
             println!("  Fetching {}...", file.name);
 
-            match client.get(&download_url).send().await {
+            // Build request with optional GitHub token
+            let mut file_request = client.get(&download_url);
+            if let Ok(token) = env::var("GITHUB_TOKEN") {
+                file_request = file_request.header("Authorization", format!("Bearer {}", token));
+            }
+
+            match file_request.send().await {
                 Ok(response) => {
                     if let Ok(text) = response.text().await {
                         if let Ok(projects) = serde_json::from_str::<Vec<GitHubProject>>(&text) {
