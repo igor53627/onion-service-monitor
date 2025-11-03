@@ -6,5 +6,13 @@
     "status": "online",
     "prev_status": "online",
     "last_checked": "2025-11-03T02:43:41.000121521Z"
+  },
+  {
+    "title": "Tornado Cash",
+    "name": "tornado-cash",
+    "onion_address": "http://cpxtor3q3klwgvk722swah7jbvz3vsoqvye5skun6tarseayw5uvpayd.onion/",
+    "status": "unknown",
+    "prev_status": "unknown",
+    "last_checked": "1970-01-01T00:00:00Z"
   }
 ]
