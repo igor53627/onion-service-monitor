@@ -1,5 +1,13 @@
 [
   {
+    "title": "Blockscout",
+    "name": "blockscout",
+    "onion_address": "http://jcevta2iwkmce7dkytj2hbhr3qm7eidnbqkotpe2jfx7ldp45dyaehad.onion/",
+    "status": "unknown",
+    "prev_status": "unknown",
+    "last_checked": ""
+  },
+  {
     "title": "DRPC",
     "name": "drpc",
     "onion_address": "http://7ikxpzt676bjj3vvgdfafryn3qtyvhf4oscja3wzv6ga2nzo2z3ugoqd.onion/ethereum/public",
