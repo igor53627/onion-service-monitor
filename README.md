@@ -391,10 +391,23 @@ docker run -e SOCKS_PROXY=socks5://host.docker.internal:9150 \
 - **GitHub Actions**: CI/CD pipeline
 - **GitHub Pages**: Static site hosting
 
+## Additional Documentation
+
+### Onion-Location Header
+
+Learn how to implement the `Onion-Location` HTTP header to help Tor Browser users discover your .onion service:
+
+- **[Onion-Location Implementation Guide](docs/ONION-LOCATION.md)** - Complete guide with nginx, Apache, and other web server configurations
+- **[nginx Configuration Examples](docs/nginx-onion-location.conf)** - Ready-to-use nginx configuration snippets
+- **[Test Script](docs/test-onion-location.sh)** - Automated testing script for header validation
+
+When implemented, Tor Browser displays a purple onion icon in the address bar, allowing users to seamlessly switch to your .onion service for enhanced privacy.
+
 ## Resources
 
 - [Arti Documentation](https://tpo.pages.torproject.net/core/arti/)
 - [Tor Project](https://www.torproject.org/)
+- [Onion-Location Specification](https://community.torproject.org/onion-services/advanced/onion-location/)
 - [React Documentation](https://react.dev/)
 - [Chakra UI](https://chakra-ui.com/)
 - [Vite](https://vitejs.dev/)
