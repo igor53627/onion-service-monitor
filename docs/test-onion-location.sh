@@ -5,8 +5,6 @@
 # Usage: ./test-onion-location.sh <domain> <expected-onion-address>
 # Example: ./test-onion-location.sh https://example.com your-onion-address.onion
 
-set -e
-
 # Colors for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
