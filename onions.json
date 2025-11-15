@@ -5,7 +5,7 @@
     "onion_address": "http://jcevta2iwkmce7dkytj2hbhr3qm7eidnbqkotpe2jfx7ldp45dyaehad.onion/",
     "status": "online",
     "prev_status": "online",
-    "last_checked": "2025-11-14T01:48:42.336041820Z"
+    "last_checked": "2025-11-15T01:44:34.590894032Z"
   },
   {
     "title": "DRPC",
@@ -13,7 +13,7 @@
     "onion_address": "http://7ikxpzt676bjj3vvgdfafryn3qtyvhf4oscja3wzv6ga2nzo2z3ugoqd.onion/ethereum/public",
     "status": "online",
     "prev_status": "online",
-    "last_checked": "2025-11-14T01:48:46.386941636Z"
+    "last_checked": "2025-11-15T01:44:40.284380116Z"
   },
   {
     "title": "Tornado Cash",
@@ -21,6 +21,6 @@
     "onion_address": "http://cpxtor3q3klwgvk722swah7jbvz3vsoqvye5skun6tarseayw5uvpayd.onion/",
     "status": "online",
     "prev_status": "online",
-    "last_checked": "2025-11-14T01:48:51.965557896Z"
+    "last_checked": "2025-11-15T01:45:25.007170637Z"
   }
 ]
