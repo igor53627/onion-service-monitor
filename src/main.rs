@@ -207,12 +207,12 @@ fn merge_onion_sites(github_sites: Vec<OnionSite>, existing_sites: Vec<OnionSite
 
     // First, add all existing sites (preserving their status and history)
     for site in existing_sites {
-        site_map.insert(site.onion_address.clone(), site);
+        site_map.insert(site.name.clone(), site);
     }
 
     // Then add/update with GitHub sites
     for github_site in github_sites {
-        site_map.entry(github_site.onion_address.clone())
+        site_map.entry(github_site.name.clone())
             .or_insert(github_site);
     }
 
