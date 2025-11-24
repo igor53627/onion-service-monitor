@@ -2,7 +2,7 @@
   {
     "title": "Blockscout",
     "name": "blockscout",
-    "onion_address": "http://jcevta2iwkmce7dkytj2hbhr3qm7eidnbqkotpe2jfx7ldp45dyaehad.onion/",
+    "onion_address": "http://blockscoutlmnjcsbaxjhysk4q7vurrlpspelnzgdhjaw3yn26npaaad.onion/",
     "status": "online",
     "prev_status": "online",
     "last_checked": "2025-11-24T01:55:22.654569677Z"
@@ -22,5 +22,13 @@
     "status": "online",
     "prev_status": "online",
     "last_checked": "2025-11-24T01:55:32.262373941Z"
+  },
+  {
+    "title": "IPFS Community",
+    "name": "ipfs-community",
+    "onion_address": "http://bafyipfs3jww2tpw3c7q2z2gzshe3gz3ofmk3zboweeevkuz5spm6aid.onion/",
+    "status": "unknown",
+    "prev_status": "unknown",
+    "last_checked": null
   }
 ]
