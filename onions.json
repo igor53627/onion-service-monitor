@@ -30,5 +30,13 @@
     "status": "online",
     "prev_status": "online",
     "last_checked": "2025-11-26T01:49:13.007256724Z"
+  },
+  {
+    "title": "Flashbots",
+    "name": "flashbots",
+    "onion_address": "http://protectfbnoqyfgo3t5ouw3c7odp55qqoxnfdd7u24nzz5pkbclbzzyd.onion/",
+    "status": "unknown",
+    "prev_status": "unknown",
+    "last_checked": null
   }
 ]
