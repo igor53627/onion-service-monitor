@@ -5,7 +5,7 @@
     "onion_address": "http://blockscoutlmnjcsbaxjhysk4q7vurrlpspelnzgdhjaw3yn26npaaad.onion/",
     "status": "online",
     "prev_status": "online",
-    "last_checked": "2025-12-29T02:04:46.064932290Z"
+    "last_checked": "2025-12-30T01:57:07.768271780Z"
   },
   {
     "title": "DRPC",
@@ -13,7 +13,7 @@
     "onion_address": "http://7ikxpzt676bjj3vvgdfafryn3qtyvhf4oscja3wzv6ga2nzo2z3ugoqd.onion/ethereum/public",
     "status": "online",
     "prev_status": "online",
-    "last_checked": "2025-12-29T02:04:49.841082261Z"
+    "last_checked": "2025-12-30T01:57:12.744188472Z"
   },
   {
     "title": "Flashbots",
@@ -21,7 +21,7 @@
     "onion_address": "http://protectfbnoqyfgo3t5ouw3c7odp55qqoxnfdd7u24nzz5pkbclbzzyd.onion/",
     "status": "online",
     "prev_status": "online",
-    "last_checked": "2025-12-29T02:04:54.383537334Z"
+    "last_checked": "2025-12-30T01:57:18.122509480Z"
   },
   {
     "title": "IPFS Community",
@@ -29,7 +29,7 @@
     "onion_address": "http://bafyipfs3jww2tpw3c7q2z2gzshe3gz3ofmk3zboweeevkuz5spm6aid.onion/",
     "status": "online",
     "prev_status": "online",
-    "last_checked": "2025-12-29T02:04:59.600433110Z"
+    "last_checked": "2025-12-30T01:57:24.097688606Z"
   },
   {
     "title": "Tornado Cash",
@@ -37,6 +37,6 @@
     "onion_address": "http://cpxtor3q3klwgvk722swah7jbvz3vsoqvye5skun6tarseayw5uvpayd.onion/",
     "status": "online",
     "prev_status": "online",
-    "last_checked": "2025-12-29T02:05:03.699541429Z"
+    "last_checked": "2025-12-30T01:58:09.295923080Z"
   }
 ]
